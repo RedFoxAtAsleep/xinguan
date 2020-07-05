@@ -28,20 +28,8 @@ def synchronize_district_data(manner='init', endurance=100):
             if_exists='append',
             index=False,
         )
-        logging.info('Synchronize DistrictInfo.')
-        # covid_19_area_detail_df = ak.covid_19_area_detail()
-        # covid_19_area_detail_df.to_sql(
-        #     DistrictInfo.__tablename__,
-        #     con=engine,
-        #     if_exists='replace',
-        #     index=False,
-        # )
-        # session.execute(
-        #     # Base.metadata.tables[DistrictInfo.__tablename__].delete()
-        #     DistrictInfo.__table__delete()
-        #
-        # )
 
+        logging.info('Synchronize DistrictInfo.')
         district_info.drop(engine, checkfirst=True)
         district_info.create(engine)
         dfs = []
