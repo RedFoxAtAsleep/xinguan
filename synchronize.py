@@ -10,28 +10,28 @@ from sqlalchemy import MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from data import District, DistrictInfo, Base
-from table import district, district_info, metadata
+from table import t_district, t_district_info, metadata
 
 
-def synchronize_district_data(manner='init', endurance=100):
+def synchronize_district_data(engine, manner='init', endurance=100):
     """
     merge, init
     """
     if manner == 'init':
         logging.info('Synchronize District.')
-        district.drop(engine, checkfirst=True)
-        district.create(engine)
+        t_district.drop(engine, checkfirst=True)
+        t_district.create(engine)
         covid_19_area_all_df = ak.covid_19_area_all()
         covid_19_area_all_df.to_sql(
-            district.name,
+            t_district.name,
             con=engine,
             if_exists='append',
             index=False,
         )
 
         logging.info('Synchronize DistrictInfo.')
-        district_info.drop(engine, checkfirst=True)
-        district_info.create(engine)
+        t_district_info.drop(engine, checkfirst=True)
+        t_district_info.create(engine)
         dfs = []
         retry = 10
         for i, (province, city, district) in enumerate(covid_19_area_all_df.to_records(index=False)):
@@ -55,7 +55,7 @@ def synchronize_district_data(manner='init', endurance=100):
                 for j in range(retry):
                     try:
                         pd.concat(dfs).to_sql(
-                            district_info.name,
+                            t_district_info.name,
                             con=engine,
                             if_exists='append',
                             index=False
@@ -74,7 +74,7 @@ def synchronize_district_data(manner='init', endurance=100):
         for j in range(retry):
             try:
                 pd.concat(dfs).to_sql(
-                    district_info.name,
+                    t_district_info.name,
                     con=engine,
                     if_exists='append',
                     index=False
@@ -106,7 +106,4 @@ if __name__ == '__main__':
         "dbname": "xinguan"
     })
     engine = db.create_engine(connection_uri)
-
-    # District.__table__.create(engine)
-    # DistrictInfo.__table__.create(engine)
-    synchronize_district_data()
+    synchronize_district_data(engine)

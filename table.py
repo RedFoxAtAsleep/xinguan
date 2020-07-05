@@ -38,7 +38,7 @@ Base = declarative_base()  # 没有绑定，新建
 metadata = Base.metadata
 '''
 
-district = Table(
+t_district = Table(
     'district',
     Column('id', Integer, Sequence('district_id_seq'), primary_key=True),
     Column('province', String(32)),
@@ -47,7 +47,7 @@ district = Table(
 )
 
 
-district_info = Table(
+t_district_info = Table(
     'district_info',
     metadata,
     Column('id', Integer, Sequence('district_info_id_seq'), primary_key=True),
