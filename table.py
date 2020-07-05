@@ -39,7 +39,7 @@ metadata = Base.metadata
 '''
 
 district = Table(
-    'table',
+    'district',
     Column('id', Integer, Sequence('district_id_seq'), primary_key=True),
     Column('province', String(32)),
     Column('city', String(32)),
