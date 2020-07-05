@@ -39,7 +39,7 @@ metadata = Base.metadata
 '''
 
 t_district = Table(
-    'district',
+    'qq_community_u2d',
     metadata,
     Column('id', Integer, Sequence('district_id_seq'), primary_key=True),
     Column('province', String(32)),
@@ -49,7 +49,7 @@ t_district = Table(
 
 
 t_district_info = Table(
-    'district_info',
+    'qq_community_district',
     metadata,
     Column('id', Integer, Sequence('district_info_id_seq'), primary_key=True),
     Column('province', String(32)),
