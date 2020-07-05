@@ -13,6 +13,9 @@ from data import District, DistrictInfo, Base
 from table import t_district, t_district_info, metadata
 
 
+
+
+
 def synchronize_district_data(engine, manner='init', endurance=100):
     """
     merge, init
