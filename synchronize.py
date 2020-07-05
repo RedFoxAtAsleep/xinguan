@@ -10,21 +10,23 @@ from sqlalchemy import MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from data import District, DistrictInfo, Base
+from table import district, district_info, metadata
 
 
 def synchronize_district_data(manner='init', endurance=100):
-    '''
+    """
     merge, init
-    '''
+    """
     if manner == 'init':
         logging.info('Synchronize District.')
+        district.drop(engine, checkfirst=True)
+        district.create(engine)
         covid_19_area_all_df = ak.covid_19_area_all()
         covid_19_area_all_df.to_sql(
-            District.__tablename__,
+            district.name,
             con=engine,
-            if_exists='replace',
-            index=True,
-            index_label='id'
+            if_exists='append',
+            index=False,
         )
         logging.info('Synchronize DistrictInfo.')
         # covid_19_area_detail_df = ak.covid_19_area_detail()
@@ -39,8 +41,9 @@ def synchronize_district_data(manner='init', endurance=100):
         #     DistrictInfo.__table__delete()
         #
         # )
-        DistrictInfo.__table__.drop(engine, checkfirst=True)
 
+        district_info.drop(engine, checkfirst=True)
+        district_info.create(engine)
         dfs = []
         retry = 10
         for i, (province, city, district) in enumerate(covid_19_area_all_df.to_records(index=False)):
@@ -64,7 +67,7 @@ def synchronize_district_data(manner='init', endurance=100):
                 for j in range(retry):
                     try:
                         pd.concat(dfs).to_sql(
-                            DistrictInfo.__tablename__,
+                            district_info.name,
                             con=engine,
                             if_exists='append',
                             index=False
@@ -83,7 +86,7 @@ def synchronize_district_data(manner='init', endurance=100):
         for j in range(retry):
             try:
                 pd.concat(dfs).to_sql(
-                    DistrictInfo.__tablename__,
+                    district_info.name,
                     con=engine,
                     if_exists='append',
                     index=False
@@ -98,7 +101,6 @@ def synchronize_district_data(manner='init', endurance=100):
                 logging.info(e)
     if manner == 'merge':
         pass
-
 
 # 同步数据周期，增量更新，全量更新
 # 周期内数据缓存
