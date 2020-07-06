@@ -221,6 +221,25 @@ def synchronize_csse_daily(engine, manner='append', endurance=15):
 
         # 统一DataFrame结构
         df = df.reindex(columns=[c.name for c in t_daily.columns])
+        df['report_day'] = report_day
+
+        try:
+            df['last_update_unify'] = df['last_update'].map(
+                lambda x: str2str(x, '%m/%d/%Y %H:%M', '%Y-%m-%dT%H:%M:%S'))
+        except Exception as e:
+            pass
+
+        try:
+            df['last_update_unify'] = df['last_update'].map(
+                lambda x: str2str(x, '%Y-%m-%dT%H:%M:%S', '%Y-%m-%dT%H:%M:%S'))
+        except Exception as e:
+            pass
+
+        try:
+            df['last_update_unify'] = df['last_update'].map(
+                lambda x: str2str(x, '%m/%d/%y %H:%M', '%Y-%m-%dT%H:%M:%S'))
+        except Exception as e:
+            pass
 
         # 处理空值
         df.fillna(value={
