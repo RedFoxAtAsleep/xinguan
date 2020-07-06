@@ -153,9 +153,9 @@ def synchronize_csse_daily(engine, manner='append', endurance=15):
     sql = select([t_daily.c.report_day], distinct=True)
     r = conn.execute(sql)  # iterator
     r = list(r)
-    r = r or ['2020-1-21']
+    r = r or ['2020-01-21']
 
-    lte_pre = max([tstr[0] for tstr in r], key=lambda x: str2struct(x))
+    lte_pre = max([tstr[0] for tstr in r], key=lambda x: str2struct(x, strp='%Y-%m-%d'))
     lte_pre = str2stamp(lte_pre, strp='%Y-%m-%d')
     lte_pre = datetime.fromtimestamp(lte_pre)
 
