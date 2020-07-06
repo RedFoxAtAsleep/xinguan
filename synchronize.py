@@ -166,7 +166,7 @@ def synchronize_csse_daily(engine, manner='append', endurance=15):
         lte_pre += timedelta(days=1)
 
         # 获取数据
-        report_day = lte_pre
+        report_day = struct2str(lte_pre.timetuple(), '%Y-%m-%d')
         df = None
         for j in range(retry):
             try:
