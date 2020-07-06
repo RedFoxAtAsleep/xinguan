@@ -152,7 +152,7 @@ def synchronize_csse_daily(engine, manner='append', endurance=15):
 
     sql = select([t_daily.c.report_day], distinct=True)
     r = conn.execute(sql)  # iterator
-    r = list(r)
+    r = [row.report_day for row in r if row.report_day is not None]
     r = r or ['2020-01-21']
 
     lte_pre = max(r, key=lambda x: str2struct(x, strp='%Y-%m-%d'))
@@ -175,7 +175,7 @@ def synchronize_csse_daily(engine, manner='append', endurance=15):
                 time.sleep(0.1)
                 break
             except HTTPError as e:
-                raise Exception("未来数据当前不可得")
+                raise Exception("未来/过去数据当前不可得")
             except URLError as e:
                 if j == retry - 1:
                     logging.info(e)
@@ -293,4 +293,14 @@ if __name__ == '__main__':
     })
     engine = db.create_engine(connection_uri)
     # synchronize_district_data(engine)
-    synchronize_csse_daily()
+    synchronize_csse_daily(engine=engine, manner='append', endurance=15)
+
+    while True:
+        try:
+            synchronize_csse_daily(engine=engine, manner='append', endurance=15)
+            logging.info('Csse_daily Sychronized.')
+            break
+        except Exception as e:
+            logging.info(e)
+            logging.info('Execute synchronize_csse_daily again.')
+
