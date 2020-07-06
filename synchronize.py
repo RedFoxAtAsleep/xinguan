@@ -293,3 +293,4 @@ if __name__ == '__main__':
     })
     engine = db.create_engine(connection_uri)
     # synchronize_district_data(engine)
+    synchronize_csse_daily()
