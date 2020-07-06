@@ -18,6 +18,11 @@ from sqlalchemy.sql import select
 from urllib.error import HTTPError, URLError
 
 
+class NoDataError(RuntimeError):
+    def __init__(self, arg):
+        self.args = arg
+
+
 def str2str(s='Mon Jul 06 11:06:15 2020', strp='%a %b %d %H:%M:%S %Y', strf='%a %b %d %H:%M:%S %Y'):
     return time.strftime(
         strf,
@@ -145,6 +150,7 @@ def synchronize_qq_community(engine, manner='init', endurance=100):
 def synchronize_csse_daily(engine, manner='append', endurance=15):
     retry = 100
     conn = engine.connect()
+    state = 'run'
 
     if manner == 'init':
         t_daily.drop(engine, checkfirst=True)
@@ -175,13 +181,17 @@ def synchronize_csse_daily(engine, manner='append', endurance=15):
                 time.sleep(0.1)
                 break
             except HTTPError as e:
-                raise Exception("未来/过去数据当前不可得")
+                logging.info("未来/过去数据当前不可得")
+                state = 'immediate_store'
+                break
             except URLError as e:
                 if j == retry - 1:
                     logging.info(e)
-                    raise Exception("失败WEB：{0}".format(report_day))
+                    logging.info("失败WEB：{0}".format(report_day))
                 logging.info(e)
                 logging.info("重试WEB：{0}".format(report_day))
+        if state == 'immediate_store':
+            break
 
         # 修改字段
         df.rename(columns={
