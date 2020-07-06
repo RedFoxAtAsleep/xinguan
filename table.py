@@ -5,7 +5,8 @@ import datetime
 import akshare as ak
 import sqlalchemy as db  # Version Check
 from sqlalchemy import create_engine  # Connecting
-from sqlalchemy import MetaData, Table, Sequence, Column, Integer, String, PrimaryKeyConstraint, ForeignKey  # Define and Create Tables
+from sqlalchemy import MetaData, Table, Sequence, Column, Integer, String, Float
+from sqlalchemy import PrimaryKeyConstraint, ForeignKey  # Define and Create Tables
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import pandas as pd
