@@ -4,7 +4,7 @@ import logging
 import sys
 
 sys.path.append("..")
-from synchronize import synchronize_qq_community
+import synchronize
 
 logging.info('Create independent engine.')
 connection_uri = "mysql+pymysql://{user}:{password}@{host}:{port}/{dbname}".format(**{
@@ -15,4 +15,4 @@ connection_uri = "mysql+pymysql://{user}:{password}@{host}:{port}/{dbname}".form
     "dbname": "xinguan"
 })
 engine = db.create_engine(connection_uri)
-synchronize_qq_community(engine)
+synchronize.synchronize_qq_community(engine)
