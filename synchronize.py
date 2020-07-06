@@ -241,13 +241,19 @@ def synchronize_csse_daily(engine, manner='append', endurance=15):
 
         try:
             df['last_update_unify'] = df['last_update'].map(
-                lambda x: str2str(x, '%Y-%m-%dT%H:%M:%S', '%Y-%m-%dT%H:%M:%S'))
+                lambda x: str2str(x, '%m/%d/%y %H:%M', '%Y-%m-%dT%H:%M:%S'))
         except Exception as e:
             pass
 
         try:
             df['last_update_unify'] = df['last_update'].map(
-                lambda x: str2str(x, '%m/%d/%y %H:%M', '%Y-%m-%dT%H:%M:%S'))
+                lambda x: str2str(x, '%Y-%m/-%d/ %H:%M:%S', '%Y-%m-%dT%H:%M:%S'))
+        except Exception as e:
+            pass
+
+        try:
+            df['last_update_unify'] = df['last_update'].map(
+                lambda x: str2str(x, '%Y-%m-%dT%H:%M:%S', '%Y-%m-%dT%H:%M:%S'))
         except Exception as e:
             pass
 
