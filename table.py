@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import time
+import datetime
 import akshare as ak
 import sqlalchemy as db  # Version Check
 from sqlalchemy import create_engine  # Connecting
@@ -59,6 +60,28 @@ t_district_info = Table(
     Column('full_address', String(64)),
     Column('cnt_sum_certain', Integer)  # -1: 表示有确诊但是确诊人数不详
 )
+
+t_daily = Table(
+    'csse_daily',
+    metadata,
+    Column('id', Integer, Sequence('csse_daily_id_seq'), primary_key=True),
+    Column('us_only_county_code_fips', Integer),
+    Column('us_only_county_name', String(64)),
+    Column('higher', String(64)),
+    Column('lower', String(64)),
+    Column('last_update', String(64)),
+    Column('last_update_unify', String(64)),
+    Column('report_day', String(64)),
+    Column('latitude', Float),
+    Column('longitude', Float),
+    Column('confirmed', Integer),
+    Column('dead', Integer),
+    Column('recovered', Integer),
+    Column('active', Integer),
+    Column('district', String(64)),
+)
+
+
 
 if __name__ == '__main__':
     # engine
