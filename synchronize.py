@@ -155,7 +155,8 @@ def synchronize_csse_daily(engine, manner='append', endurance=15):
     r = list(r)
     r = r or ['2020-01-21']
 
-    lte_pre = max([tstr[0] for tstr in r], key=lambda x: str2struct(x, strp='%Y-%m-%d'))
+    lte_pre = max(r, key=lambda x: str2struct(x, strp='%Y-%m-%d'))
+    logging.info(lte_pre, type(lte_pre))
     lte_pre = str2stamp(lte_pre, strp='%Y-%m-%d')
     lte_pre = datetime.fromtimestamp(lte_pre)
 
