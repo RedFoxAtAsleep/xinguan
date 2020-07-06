@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import sqlalchemy as db  # Version Check
 import logging
+import sys
+sys.path.append("..")
 from synchronize import synchronize_csse_daily
 
 if __name__ == '__main__':

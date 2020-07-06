@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import sqlalchemy as db
 import logging
+import sys
+sys.path.append("..")
 from synchronize import synchronize_qq_community
 
 if __name__ == '__main__':
