@@ -16,4 +16,12 @@ connection_uri = "mysql+pymysql://{user}:{password}@{host}:{port}/{dbname}".form
 })
 engine = db.create_engine(connection_uri)
 logging.info('Synchronize csse daily.')
-synchronize_csse_daily(engine, manner='append', endurance=15)
+
+while True:
+    try:
+        synchronize_csse_daily(engine=engine, manner='append', endurance=15)
+        logging.info('Csse_daily Sychronized.')
+        break
+    except Exception as e:
+        logging.info(e)
+        logging.info('Execute synchronize_csse_daily again.')
